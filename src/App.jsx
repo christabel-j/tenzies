@@ -17,10 +17,23 @@ export default function App() {
     return allDice;
   }
 
+  //hold function
+  function hold(id) {
+    console.log(id);
+  }
+
   const [dice, setDice] = useState(generateAllNewDice());
 
   const diceElements = dice.map((die) => {
-    return <Die value={die.value} key={die.id} isHeld={die.isHeld} />;
+    return (
+      <Die
+        value={die.value}
+        key={die.id}
+        isHeld={die.isHeld}
+        hold={hold}
+        id={die.id}
+      />
+    );
   });
 
   // dice roll function
