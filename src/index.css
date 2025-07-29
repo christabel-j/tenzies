@@ -11,3 +11,8 @@ body {
 button {
   cursor: pointer;
 }
+
+html,
+body {
+  overflow: hidden;
+}

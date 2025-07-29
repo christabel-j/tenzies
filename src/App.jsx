@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./App.css";
 import Die from "./Die";
 import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
+import { useWindowSize } from "react-use";
+import Confetti from "react-confetti";
 
 export default function App() {
   // function to generate 10 random dice
@@ -72,9 +74,15 @@ export default function App() {
 
   gameWon(() => allSelectedKeyValuesSame(dice, ["value", "isHeld"]));
 
+  // confetti
+  const { width, height } = useWindowSize();
+
   return (
     <>
       <main>
+        {allSelectedKeyValuesSame(dice, ["value", "isHeld"]) && (
+          <Confetti width={width} height={height} />
+        )}
         <h1 className="title">Tenzies</h1>
         <p className="instructions">
           Roll until all dice are the same. Click each die to freeze it at its
