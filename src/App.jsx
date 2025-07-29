@@ -29,7 +29,7 @@ export default function App() {
     });
   }
 
-  const [dice, setDice] = useState(generateAllNewDice());
+  const [dice, setDice] = useState(() => generateAllNewDice());
 
   const diceElements = dice.map((die) => {
     return (
@@ -45,13 +45,17 @@ export default function App() {
 
   // dice roll function
   function roll() {
-    setDice((oldDice) => {
-      return oldDice.map((die) => {
-        return die.isHeld
-          ? { ...die }
-          : { ...die, value: Math.floor(Math.random() * 6 + 1) };
+    if (!allSelectedKeyValuesSame(dice, ["value", "isHeld"])) {
+      setDice((oldDice) => {
+        return oldDice.map((die) => {
+          return die.isHeld
+            ? { ...die }
+            : { ...die, value: Math.floor(Math.random() * 6 + 1) };
+        });
       });
-    });
+    } else {
+      setDice(generateAllNewDice());
+    }
   }
 
   // end of game logic (test)
