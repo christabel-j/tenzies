@@ -19,7 +19,12 @@ export default function App() {
 
   //hold function
   function hold(id) {
-    console.log(id);
+    //change state. need previous array of dice objects -> map through 2 c if id of die clicked matches die in array -> toggle isHeld. if not, keep die object (it wasnt clicked)
+    setDice((oldDice) => {
+      return oldDice.map((die) => {
+        return die.id === id ? { ...die, isHeld: !die.isHeld } : die;
+      });
+    });
   }
 
   const [dice, setDice] = useState(generateAllNewDice());
@@ -38,16 +43,47 @@ export default function App() {
 
   // dice roll function
   function roll() {
-    setDice(generateAllNewDice());
+    setDice((oldDice) => {
+      return oldDice.map((die) => {
+        return die.isHeld
+          ? { ...die }
+          : { ...die, value: Math.floor(Math.random() * 6 + 1) };
+      });
+    });
   }
+
+  // end of game logic (test)
+  function allSelectedKeyValuesSame(arr, keysToCheck) {
+    if (arr.length === 0) return true;
+
+    return arr.every((obj) =>
+      keysToCheck.every((key) => obj[key] === arr[0][key])
+    );
+  }
+
+  let newGameBtn;
+  function gameWon(callback) {
+    if (callback()) {
+      console.log("Game Won!");
+      newGameBtn = true;
+    }
+    return newGameBtn;
+  }
+
+  gameWon(() => allSelectedKeyValuesSame(dice, ["value", "isHeld"]));
 
   return (
     <>
       <main>
+        <h1 className="title">Tenzies</h1>
+        <p className="instructions">
+          Roll until all dice are the same. Click each die to freeze it at its
+          current value between rolls.
+        </p>
         <div className="dice-container">{diceElements}</div>
         <div className="rollBtnContainer">
           <button className="rollBtn" onClick={roll}>
-            Roll
+            {newGameBtn ? "New Game" : "Roll"}
           </button>
         </div>
       </main>
